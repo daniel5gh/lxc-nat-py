@@ -53,8 +53,8 @@
 
 import argparse
 import subprocess
-import sys
 import yaml
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -75,7 +75,7 @@ def main():
 
     # will hold a mapping between lxc container name and their IP
     containers = {}
-    # will hold iptables commands to be exectuted
+    # will hold iptables commands to be executed
     forwards = []
 
     # run lxc-ls to query running containers and their IPs
@@ -96,9 +96,9 @@ def main():
 
     # read in YAML file
     d = yaml.load(open(cmdline_args.conf))
-    # fill the forwards list accoring to YAML contents
+    # fill the forwards list according to YAML contents
     for forward in d['forwards']:
-        # TODO: check existance of mandatory keys
+        # TODO: check existence of mandatory keys
         src_iface = forward['source'].get('interface')
         src_ip = forward['source'].get('ip')
         src_port = forward['source']['port']
@@ -133,32 +133,32 @@ def main():
     # only when the chain exists
     if chain_exists('lxc-nat'):
         # flush and delete
-        runcmd('iptables -t nat -F lxc-nat', cmdline_args.dry_run,
-               cmdline_args.verbose)
-        runcmd('iptables -t nat -D PREROUTING -j lxc-nat', cmdline_args.dry_run,
-               cmdline_args.verbose)
-        runcmd('iptables -t nat -X lxc-nat', cmdline_args.dry_run,
-               cmdline_args.verbose)
+        run_cmd('iptables -t nat -F lxc-nat', cmdline_args.dry_run,
+                cmdline_args.verbose)
+        run_cmd('iptables -t nat -D PREROUTING -j lxc-nat', cmdline_args.dry_run,
+                cmdline_args.verbose)
+        run_cmd('iptables -t nat -X lxc-nat', cmdline_args.dry_run,
+                cmdline_args.verbose)
 
     # don't do these if user only want the flush
     if not cmdline_args.flush:
         # create chain
-        runcmd('iptables -t nat -N lxc-nat', cmdline_args.dry_run,
-               cmdline_args.verbose)
+        run_cmd('iptables -t nat -N lxc-nat', cmdline_args.dry_run,
+                cmdline_args.verbose)
         # and add it to PREROUTING
-        runcmd('iptables -t nat -A PREROUTING -j lxc-nat', cmdline_args.dry_run,
-               cmdline_args.verbose)
+        run_cmd('iptables -t nat -A PREROUTING -j lxc-nat', cmdline_args.dry_run,
+                cmdline_args.verbose)
         # add forward rules
         for cmd in forwards:
-            runcmd(cmd, cmdline_args.dry_run, cmdline_args.verbose)
+            run_cmd(cmd, cmdline_args.dry_run, cmdline_args.verbose)
 
 
-def runcmd(cmd, noop, verbose=True):
+def run_cmd(cmd, no_op, verbose=True):
     # Popen wants args as list, split on space
     args = cmd.split()
     if verbose:
         print(' '.join(args))
-    if not noop:
+    if not no_op:
         p = subprocess.Popen(args)
         p.wait()
 
@@ -176,5 +176,5 @@ def chain_exists(name):
     # doesn't exist.
     return p.wait() == 0
 
-if __name__=='__main__':
+if __name__ == '__main__':
     main()
