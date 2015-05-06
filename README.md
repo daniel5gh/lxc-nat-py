@@ -11,7 +11,8 @@ http://terrarum.net/blog/building-an-lxc-server-1404.html
 I took those and made a python version, I like python. When no filename is
 passed to `--conf`, `./nat-conf.yml` is used.
 
-Usage:
+## Usage
+
 ```
   usage: lxc-nat.py [-h] [-v] [-F] [--dry-run] [-c CONF]
 
@@ -48,3 +49,11 @@ An example YAML conf file:
         name: test1
         port: 22
 ```
+
+## Packaging
+
+To make a dist package run:
+```
+python setup.py bdist_wheel
+```
+This will give you a python wheel in `./dist/`
