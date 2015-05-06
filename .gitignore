@@ -55,3 +55,7 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Intellij / PyCharm project files
+.idea
+*.iml
