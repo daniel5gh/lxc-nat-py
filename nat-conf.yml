@@ -1,0 +1,24 @@
+forwards:
+#  - source:
+#      ip: 10.0.0.1
+#      port: 8080
+#    destination:
+#      name: www
+#      port: 80
+#  - source:
+#      port: 3306
+#    destination:
+#      name: mysql_server
+#  - proto: udp
+#    source:
+#      interface: eth1
+#      port: 53333
+#    destination:
+#      name: dns_server
+
+  - source:
+#      ip: 10.0.0.100
+      port: 1234
+    destination:
+      name: test1
+      port: 22
